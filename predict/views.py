@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import pandas as pd
-#import
+from . models import Result
 # Create your views here.
 
 def predict(request):
@@ -21,8 +21,11 @@ def predict_chances(request):
 
         classification=result[0]
 
-        # Result.objects.create(sepal_length=sepal_length,sepal_width=sepal_width,
-        # petal_length=petal_length,petal_width=petal_width,classification=classification)
+        Result.objects.create(sepal_length=sepal_length,sepal_width=sepal_width,
+        petal_length=petal_length,petal_width=petal_width,classification=classification)
 
         return JsonResponse({'result':classification,'sepal_length':sepal_length,
         'sepal_width':sepal_width,'petal_length':petal_length,'petal_width':petal_width},safe=False)
+def view_results(request):
+    data={'dataset':Result.objects.all()}
+    return render(request,'results.html',data)
